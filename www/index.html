@@ -688,22 +688,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
+    <!-- Config -->
+    <script src="js/config.js"></script>
     <script>
         // --- 1. FIREBASE SETUP ---
         let db;
-        const firebaseConfig = {
-            apiKey: "AIzaSyAoI3WktQq7KHLGJ0IfcyeJaIRZImdI4CM",
-            authDomain: "guni1chauhan.firebaseapp.com",
-            projectId: "guni1chauhan",
-            storageBucket: "guni1chauhan.firebasestorage.app",
-            messagingSenderId: "869958030776",
-            appId: "1:869958030776:web:62a3f02a8b73fe57feab4d",
-            measurementId: "G-MWXHH0KTE5"
-        };
 
         try {
-            if (Object.keys(firebaseConfig).length > 0 && firebase.apps.length === 0) {
-                firebase.initializeApp(firebaseConfig);
+            // Use Global accessible window.firebaseConfig from config.js
+            if (typeof window.firebaseConfig !== 'undefined' && Object.keys(window.firebaseConfig).length > 0 && firebase.apps.length === 0) {
+                firebase.initializeApp(window.firebaseConfig);
                 db = firebase.firestore();
                 firebase.auth().signInAnonymously().catch(e => console.error("Auth Error", e));
                 console.log("Firebase Connected");
