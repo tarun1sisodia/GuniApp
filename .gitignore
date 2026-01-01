@@ -10,6 +10,10 @@ android/local.properties
 build/
 !android/app/src/main/assets/public/
 
+# Keystores & Secrets
+*.keystore
+keystore.properties
+
 # Capacitor
 capacitor.config.json.timestamp
 
