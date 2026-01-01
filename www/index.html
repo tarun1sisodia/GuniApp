@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year 2026</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1"
+        rel="stylesheet" />
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#fbbf24', // Amber-400 (Gold)
+                        secondary: '#38bdf8', // Sky-400 (Bright Blue)
+                        dark: '#020617', // Slate-950
+                        'dark-surface': '#1e293b', // Slate-800
+                        light: '#f8fafc' // Slate-50
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        handwriting: ['Dancing Script', 'cursive'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in-up': 'fadeInUp 1s ease-out forwards',
+                        'bounce-subtle': 'bounceSubtle 2s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        bounceSubtle: {
+                            '0%, 100%': { transform: 'translateY(-5%)' },
+                            '50%': { transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* --- Custom Styles --- */
+        body {
+            background-color: #020617;
+            cursor: none;
+            user-select: none;
+            -webkit-user-select: none;
+            /* Safari */
+            -moz-user-select: none;
+            /* Firefox */
+            -ms-user-select: none;
+            /* IE10+/Edge */
+        }
+
+        /* Custom Cursor */
+        .cursor-trail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: screen;
+        }
+
+        /* Voice Glow Styles (Updated for Secret Reveal) */
+        .lyric-word {
+            opacity: 0;
+            /* Hidden by default */
+            filter: blur(12px);
+            /* Blurred by default */
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-block;
+            margin-right: 0.35em;
+            transform: translateY(10px);
+        }
+
+        .lyric-active {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0) scale(1.1);
+            color: #fff;
+            text-shadow: 0 0 20px rgba(236, 72, 153, 0.9), 0 0 40px rgba(139, 92, 246, 0.7);
+        }
+
+        .lyric-passed {
+            opacity: 0.8;
+            filter: blur(0);
+            transform: translateY(0);
+            color: #e2e8f0;
+        }
+
+        /* Message Overlay */
+        .message-locked {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 5, 24, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease;
+        }
+
+        /* 3D Tilt Card Effect */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+        }
+
+        .tilt-content {
+            transform: translateZ(20px);
+        }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(30, 27, 46, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f0518;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4c1d95;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6d28d9;
+        }
+
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .reveal-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- NEW YEAR REVEAL STYLES --- */
+
+        /* 1. Alive/Glowing Text Effect */
+        @keyframes neon-pulse {
+
+            0%,
+            100% {
+                text-shadow:
+                    0 0 7px #fff,
+                    0 0 10px #fff,
+                    0 0 21px #fff,
+                    0 0 42px #38bdf8,
+                    0 0 82px #38bdf8,
+                    0 0 92px #38bdf8,
+                    0 0 102px #38bdf8,
+                    0 0 151px #38bdf8;
+            }
+
+            50% {
+                text-shadow:
+                    0 0 4px #fff,
+                    0 0 7px #fff,
+                    0 0 13px #fff,
+                    0 0 25px #38bdf8,
+                    0 0 50px #38bdf8,
+                    0 0 60px #38bdf8,
+                    0 0 70px #38bdf8,
+                    0 0 90px #38bdf8;
+            }
+        }
+
+        .text-alive {
+            animation: neon-pulse 1.5s infinite alternate;
+        }
+
+        /* 2. Overlays */
+        .fullscreen-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            /* Above everything */
+            background: #0f0518;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease;
+        }
+
+        .hidden-overlay {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .countdown-number {
+            font-size: 15rem;
+            font-weight: 900;
+            background: linear-gradient(to bottom, #fff, #38bdf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            animation: pulse-beat 1s infinite;
+        }
+
+        @keyframes pulse-beat {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* --- 3D CAROUSEL STYLES --- */
+        :root {
+            --carousel-radius: 350px;
+            --card-width: 300px;
+            --card-height: 450px;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --carousel-radius: 160px;
+                /* Tighter radius for mobile */
+                --card-width: 220px;
+                --card-height: 340px;
+            }
+        }
+
+        .carousel-scene {
+            perspective: 1000px;
+            width: 100%;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: visible;
+        }
+
+        .carousel {
+            width: var(--card-width);
+            height: var(--card-height);
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+        }
+
+        .carousel-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            /* Ensure backface visibility if we want to see them rotate */
+            backface-visibility: hidden;
+        }
+
+        /* Specific rotations using variables */
+        .carousel-card:nth-child(1) {
+            transform: rotateY(0deg) translateZ(var(--carousel-radius));
+        }
+
+        .carousel-card:nth-child(2) {
+            transform: rotateY(120deg) translateZ(var(--carousel-radius));
+        }
+
+        .carousel-card:nth-child(3) {
+            transform: rotateY(240deg) translateZ(var(--carousel-radius));
+        }
+
+        .carousel-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Better text overlay */
+        .carousel-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            padding-bottom: 2.5rem;
+            /* Extra padding for mobile bottom bar areas */
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.6) 50%, transparent);
+            transform: translateZ(1px);
+            /* Slight Z-boost to prevent clipping */
+        }
+
+        /* --- MOBILE PERFORMANCE OPTIMIZATION --- */
+        @media (max-width: 768px) {
+
+            /* Reduce blur radius significantly */
+            .glass-panel,
+            .carousel-card,
+            .message-locked,
+            #entrance-overlay button {
+                backdrop-filter: blur(8px) !important;
+                -webkit-backdrop-filter: blur(8px) !important;
+            }
+
+            /* Disable some heavy shadows */
+            .carousel-card {
+                box-shadow: 0 0 10px rgba(236, 72, 153, 0.3) !important;
+            }
+
+            /* Simplify animations or slow them down to save CPU */
+            .animate-pulse-slow {
+                animation: none !important;
+                /* Disable background pulse */
+            }
+        }
+    </style>
+</head>
+
+<!-- CHANGED: Added 'overflow-hidden' to lock scrolling initially -->
+
+<body class="text-white font-sans overflow-hidden antialiased selection:bg-secondary selection:text-white">
+
+    <!-- 0. FINAL COUNTDOWN OVERLAY (10s) -->
+    <div id="final-countdown" class="fullscreen-overlay hidden-overlay">
+        <div class="text-center space-y-8 relative z-10">
+            <p class="text-secondary text-2xl uppercase tracking-[0.5em] font-bold animate-pulse">Approaching Midnight
+            </p>
+            <h1 id="big-count" class="countdown-number">10</h1>
+        </div>
+    </div>
+
+    <!-- 0.1 GRAND REVEAL OVERLAY (Happy New Year) -->
+    <div id="grand-reveal" class="fullscreen-overlay hidden-overlay">
+        <canvas id="fireworks-canvas" class="absolute inset-0 z-0"></canvas>
+        <div class="text-center space-y-12 relative z-10 px-4">
+            <h1 class="text-6xl md:text-9xl font-black font-handwriting text-alive text-white leading-tight">
+                Happy New Year<br>
+                <span class="text-secondary">2026!</span>
+            </h1>
+            <p class="text-slate-300 text-xl font-light tracking-wide max-w-2xl mx-auto">
+                Welcome to our year. Everything begins now.
+            </p>
+            <button onclick="unlockScroll()"
+                class="group relative px-12 py-5 bg-white text-dark font-bold rounded-full hover:scale-105 transition-transform shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+                <span class="relative z-10 flex items-center gap-2">
+                    Start Our Journey <span class="material-symbols-outlined">arrow_downward</span>
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 1. ENTRANCE OVERLAY -->
+    <div id="entrance-overlay"
+        class="fixed inset-0 z-[100] bg-dark flex flex-col items-center justify-center transition-opacity duration-1000">
+        <div class="text-center space-y-8 p-6 relative z-10">
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-secondary/20 rounded-full blur-[60px] animate-pulse-slow">
+            </div>
+            <h1
+                class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-handwriting animate-float">
+                2026</h1>
+            <p class="text-slate-400 text-lg font-light tracking-wide">Wishing you the best year ahead...</p>
+            <button id="enter-btn"
+                class="group relative px-10 py-4 bg-white/5 backdrop-blur-md rounded-full border border-white/10 hover:border-secondary/50 transition-all duration-500 hover:scale-110 overflow-hidden shadow-2xl shadow-secondary/20">
+                <div
+                    class="absolute inset-0 bg-gradient-to-r from-primary/40 to-secondary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                </div>
+                <span
+                    class="relative z-10 flex items-center gap-3 font-bold text-white tracking-widest text-sm uppercase">
+                    <span class="material-symbols-outlined filled text-yellow-400 group-hover:animate-ping">star</span>
+                    Let's Celebrate
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. CUSTOM CURSOR CANVAS -->
+    <canvas id="cursor-canvas" class="cursor-trail"></canvas>
+
+    <!-- 3. AUDIO ELEMENTS -->
+    <!-- Audio 1: Background Music (Instrumental) -->
+    <audio id="bg-instrumental" loop preload="auto">
+        <source src="assets/instrumental.mp3?v=2" type="audio/mpeg">
+    </audio>
+
+    <!-- Audio 2: Your Voice Message -->
+    <audio id="voice-note" preload="auto">
+        <source src="assets/mine.mp3?v=2" type="audio/mpeg">
+    </audio>
+
+    <!-- SECRET ADMIN MODAL -->
+    <div id="admin-modal" class="fixed inset-0 z-[150] bg-black/95 hidden items-center justify-center backdrop-blur-md">
+        <div class="glass-panel p-8 rounded-2xl max-w-sm w-full text-center space-y-6 relative">
+            <button onclick="document.getElementById('admin-modal').style.display='none'"
+                class="absolute top-4 right-4 text-white/50 hover:text-white">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            <h3 class="text-2xl font-bold text-white">Wishes Sent ✨</h3>
+            <div class="py-8">
+                <p class="text-white/60 text-xs uppercase tracking-widest mb-2">Total 'Send Hype' Clicks</p>
+                <p id="admin-count"
+                    class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+                    0</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Controls (For Background Music & Share) -->
+    <div class="fixed top-6 right-6 z-50 flex gap-4 opacity-0 transition-opacity duration-1000" id="controls-ui">
+        <button onclick="shareApp()"
+            class="glass-panel text-white p-3 rounded-full hover:bg-white/10 transition-all duration-300 shadow-lg group">
+            <span class="material-symbols-outlined group-hover:scale-110 transition-transform">share</span>
+        </button>
+        <button id="music-toggle"
+            class="glass-panel text-white p-3 rounded-full hover:bg-white/10 transition-all duration-300 shadow-lg group">
+            <span class="material-symbols-outlined group-hover:rotate-12 transition-transform"
+                id="music-icon">music_note</span>
+        </button>
+    </div>
+
+    <!-- 4. FLOATING ACTION BUTTON -->
+    <div class="fixed bottom-8 right-6 z-50">
+        <button onclick="sendLove()"
+            class="group relative w-16 h-16 bg-gradient-to-tr from-amber-500 to-yellow-600 rounded-full flex items-center justify-center text-white shadow-xl shadow-amber-500/30 hover:shadow-amber-500/60 hover:scale-110 transition-all duration-300">
+            <span class="material-symbols-outlined text-3xl animate-bounce">celebration</span>
+            <span
+                class="absolute right-full mr-4 top-1/2 -translate-y-1/2 scale-0 group-hover:scale-100 origin-right transition-transform bg-white/90 text-slate-900 text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg">Send
+                Hype!</span>
+        </button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="min-h-screen flex flex-col items-center relative">
+
+        <!-- SECTION 1: HERO & COUNTDOWN -->
+        <section
+            class="min-h-screen w-full flex flex-col justify-center items-center relative overflow-hidden px-6 pt-20 pb-10">
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+                <div
+                    class="absolute top-[20%] left-[10%] w-96 h-96 bg-primary/20 rounded-full blur-[120px] animate-pulse-slow">
+                </div>
+                <div class="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[150px] animate-pulse-slow"
+                    style="animation-delay: 2s;"></div>
+            </div>
+
+            <div class="z-10 text-center max-w-4xl mx-auto flex flex-col items-center gap-10">
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm animate-fade-in-up">
+                    <span class="relative flex h-3 w-3">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
+                    </span>
+                    <span class="text-secondary text-xs font-bold uppercase tracking-widest">Beginning 2026
+                        Together</span>
+                </div>
+
+                <div class="space-y-6 animate-fade-in-up" style="animation-delay: 0.2s;">
+                    <!-- CHANGED: Hidden initially, revealed later -->
+                    <h1 class="text-5xl md:text-8xl font-black leading-tight tracking-tight drop-shadow-2xl">
+                        Waiting for<br>
+                        <span class="text-gradient font-handwriting py-2 block md:inline">2026...</span>
+                    </h1>
+                    <p class="text-slate-300 text-lg md:text-2xl font-light max-w-2xl mx-auto leading-relaxed">
+                        May this year bring you closer to your dreams, fill your life with success, and create memories
+                        you'll cherish forever.
+                    </p>
+                </div>
+
+                <div id="timer-container"
+                    class="glass-panel p-6 md:p-8 rounded-3xl w-full max-w-2xl animate-fade-in-up hover:border-secondary/30 transition-colors duration-500"
+                    style="animation-delay: 0.4s;">
+                    <div class="grid grid-cols-4 gap-4 text-center divide-x divide-white/10">
+                        <div class="flex flex-col"><span class="text-3xl md:text-5xl font-bold font-mono text-white"
+                                id="days">00</span><span
+                                class="text-[10px] md:text-xs text-secondary uppercase font-bold tracking-widest mt-2">Days</span>
+                        </div>
+                        <div class="flex flex-col"><span class="text-3xl md:text-5xl font-bold font-mono text-white"
+                                id="hours">00</span><span
+                                class="text-[10px] md:text-xs text-secondary uppercase font-bold tracking-widest mt-2">Hours</span>
+                        </div>
+                        <div class="flex flex-col"><span class="text-3xl md:text-5xl font-bold font-mono text-white"
+                                id="minutes">00</span><span
+                                class="text-[10px] md:text-xs text-secondary uppercase font-bold tracking-widest mt-2">Mins</span>
+                        </div>
+                        <div class="flex flex-col"><span
+                                class="text-3xl md:text-5xl font-bold font-mono text-secondary animate-pulse"
+                                id="seconds">00</span><span
+                                class="text-[10px] md:text-xs text-secondary uppercase font-bold tracking-widest mt-2">Secs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="scrollToGallery()"
+                    class="mt-8 animate-bounce text-slate-500 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-4xl">keyboard_double_arrow_down</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- SECTION 2: 3D MEMORY GALLERY -->
+        <!-- SECTION 2: 2026 ASPIRATIONS (Replaces Gallery) -->
+        <section id="gallery" class="w-full py-32 px-4 md:px-8 relative z-10">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col items-center mb-16 text-center">
+                    <span class="text-secondary font-handwriting text-4xl mb-3 transform -rotate-3 inline-block">New
+                        Beginnings</span>
+                    <h2
+                        class="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-500">
+                        Hopes for 2026</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div
+                        class="glass-panel p-8 rounded-3xl text-center transform hover:scale-105 transition-transform duration-300">
+                        <div
+                            class="w-20 h-20 mx-auto bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mb-6 shadow-lg shadow-indigo-500/30">
+                            <span class="material-symbols-outlined text-4xl text-white">flight_takeoff</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">New Adventures</h3>
+                        <p class="text-slate-300 leading-relaxed">May this year take you to places you've never been and
+                            experiences you'll never forget.</p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div
+                        class="glass-panel p-8 rounded-3xl text-center transform hover:scale-105 transition-transform duration-300 translate-y-0 md:-translate-y-4 border border-secondary/20 shadow-2xl shadow-secondary/10">
+                        <div
+                            class="w-20 h-20 mx-auto bg-gradient-to-br from-pink-500 to-rose-600 rounded-full flex items-center justify-center mb-6 shadow-lg shadow-pink-500/30">
+                            <span class="material-symbols-outlined text-4xl text-white">auto_awesome</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Success & Growth</h3>
+                        <p class="text-slate-300 leading-relaxed">Dream big, work hard, and achieve everything you set
+                            your mind to. This is your year.</p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div
+                        class="glass-panel p-8 rounded-3xl text-center transform hover:scale-105 transition-transform duration-300">
+                        <div
+                            class="w-20 h-20 mx-auto bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-full flex items-center justify-center mb-6 shadow-lg shadow-emerald-500/30">
+                            <span class="material-symbols-outlined text-4xl text-white">favorite</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Happiness</h3>
+                        <p class="text-slate-300 leading-relaxed">Wishing you endless laughter, cherised moments, and
+                            being surrounded by those who matter most.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SECRET VOICE MESSAGE (BLURRED INITIALLY) -->
+        <section class="w-full py-20 px-6 flex justify-center items-center min-h-[90vh] relative reveal-on-scroll">
+            <div
+                class="glass-panel w-full max-w-3xl p-8 md:p-14 rounded-[2rem] relative overflow-hidden text-center flex flex-col items-center gap-8 border-t border-white/10 shadow-2xl">
+
+                <!-- BLUR OVERLAY & NOTIFICATION -->
+                <div id="message-lock" class="message-locked rounded-[2rem]">
+                    <div
+                        class="glass-panel p-6 rounded-2xl flex flex-col items-center gap-4 border border-white/20 shadow-2xl animate-bounce-subtle">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center animate-pulse">
+                            <span class="material-symbols-outlined text-3xl text-white">graphic_eq</span>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="font-bold text-white text-lg">A Special Wish</h3>
+                            <p id="sender-label" class="text-xs text-slate-300 uppercase tracking-widest">Open Me</p>
+                        </div>
+                        <button onclick="playVoiceMessage()"
+                            class="mt-2 px-8 py-3 bg-white text-primary rounded-full font-bold hover:scale-105 transition-transform flex items-center gap-2">
+                            <span class="material-symbols-outlined filled">play_arrow</span>
+                            Play Me
+                        </button>
+                    </div>
+                </div>
+
+                <canvas id="visualizer-canvas"
+                    class="absolute bottom-0 left-0 w-full h-48 opacity-20 pointer-events-none"></canvas>
+
+                <div
+                    class="w-20 h-20 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white shadow-lg shadow-primary/30">
+                    <span class="material-symbols-outlined text-4xl">local_florist</span>
+                </div>
+
+                <div class="space-y-8 relative z-10 w-full">
+                    <h2 class="font-handwriting text-5xl md:text-6xl text-white drop-shadow-lg">A Wish for 2026</h2>
+
+                    <!-- LYRIC CONTAINER (Initially Hidden/Blurred) -->
+                    <div id="lyrics-container"
+                        class="prose prose-invert prose-lg leading-loose font-light min-h-[200px] max-w-xl mx-auto text-xl md:text-3xl font-sans text-slate-200">
+                        <!-- Words will be injected here -->
+                    </div>
+                </div>
+
+                <div id="signature-block" class="pt-8 opacity-0 transition-opacity duration-1000">
+                    <p class="font-handwriting text-3xl text-white/80">Best Wishes,<br><span id="signature-name"
+                            class="text-4xl text-white font-bold">2026</span></p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="py-12 text-center text-slate-600 text-sm font-medium tracking-widest uppercase">
+            <!-- SECRET TRIGGER: Double Click text below -->
+            <p id="admin-trigger" class="cursor-pointer hover:text-white transition-colors select-none">Made with ❤️</p>
+        </footer>
+
+    </main>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox"
+        class="fixed inset-0 z-[200] bg-black/95 hidden flex flex-col justify-center items-center p-4 opacity-0 transition-opacity duration-500 backdrop-blur-sm">
+        <button class="absolute top-6 right-6 text-white p-4 hover:bg-white/10 rounded-full transition-colors"
+            onclick="closeLightbox()">
+            <span class="material-symbols-outlined text-4xl">close</span>
+        </button>
+        <img id="lightbox-img" src=""
+            class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-500">
+        <p id="lightbox-caption"
+            class="text-white mt-6 text-3xl font-handwriting text-center drop-shadow-lg text-secondary"></p>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <script>
+        // --- 1. FIREBASE SETUP ---
+        let db;
+        const firebaseConfig = {
+            apiKey: "AIzaSyAoI3WktQq7KHLGJ0IfcyeJaIRZImdI4CM",
+            authDomain: "guni1chauhan.firebaseapp.com",
+            projectId: "guni1chauhan",
+            storageBucket: "guni1chauhan.firebasestorage.app",
+            messagingSenderId: "869958030776",
+            appId: "1:869958030776:web:62a3f02a8b73fe57feab4d",
+            measurementId: "G-MWXHH0KTE5"
+        };
+
+        try {
+            if (Object.keys(firebaseConfig).length > 0 && firebase.apps.length === 0) {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                firebase.auth().signInAnonymously().catch(e => console.error("Auth Error", e));
+                console.log("Firebase Connected");
+            }
+        } catch (e) { console.log("Firebase config missing or error. Tracking disabled."); }
+
+        // --- 2. SMART VOICE SYNC ---
+        // UPDATE SENTENCES HERE WITH START AND END TIMES
+        const SENTENCES = [
+            { text: "As we step into 2026,", start: 0.5, end: 2.5 },
+            { text: "May this year bring you new hope, success,", start: 3.0, end: 6.0 },
+            { text: "and moments that make you smile every day.", start: 6.5, end: 9.5 },
+            { text: "Wishing you a very Happy New Year!", start: 10.0, end: 12.0 }
+        ];
+
+        // Generator Logic
+        const VOICE_DATA = [];
+        SENTENCES.forEach(sentence => {
+            const words = sentence.text.split(" ");
+            const duration = sentence.end - sentence.start;
+            const timePerWord = duration / words.length;
+            words.forEach((word, i) => {
+                VOICE_DATA.push({ text: word, time: sentence.start + (i * timePerWord) });
+            });
+        });
+
+        // const TARGET_DATE = new Date("January 1, 2026 00:00:00").getTime(); // Moved to Section 4
+
+
+        // --- AUDIO ENGINE ---
+        let audioContext, analyser, dataArray;
+        let isAudioInit = false;
+
+        // Audio Element References
+        const bgMusic = document.getElementById('bg-instrumental'); // The light weight song
+        const voiceNote = document.getElementById('voice-note'); // The actual message
+
+        // Add Error Listeners (Restored for Debugging)
+        [bgMusic, voiceNote].forEach(audio => {
+            audio.addEventListener('error', (e) => {
+                console.error(`Audio error on #${audio.id}:`, e.target.error.message, e.target.error);
+            });
+        });
+
+        const lyricsContainer = document.getElementById('lyrics-container');
+        let isVoicePlaying = false;
+
+        // Initialize Lyrics (Hidden State)
+        function initLyrics() {
+            lyricsContainer.innerHTML = '';
+            VOICE_DATA.forEach((item, index) => {
+                const span = document.createElement('span');
+                span.innerText = item.text + " ";
+                span.className = 'lyric-word'; // Start blurred/hidden
+                span.id = `word-${index}`;
+                lyricsContainer.appendChild(span);
+            });
+        }
+
+        // Loop for Revealing Lyrics
+
+
+        // --- AUDIO ENGINE (ROBUST MODE) ---
+        // Simplified to not use Web Audio API to avoid CORS issues on Netlify
+        // Visualizer is now a simulation synced to playback state
+
+        function initAudioContext() {
+            // No-op for robust mode, kept to avoid breaking calls
+            const canvas = document.getElementById('visualizer-canvas');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            drawVisualizer();
+        }
+
+        // --- SIMULATED VISUALIZER ---
+        // Guarantees visual feedback without risking audio playback failure
+        function drawVisualizer() {
+            const canvas = document.getElementById('visualizer-canvas');
+            const ctx = canvas.getContext('2d');
+            const bars = 50;
+            const barWidth = canvas.width / bars;
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Only animate vigorously if voice is playing
+                const isPlaying = !voiceNote.paused;
+
+                for (let i = 0; i < bars; i++) {
+                    // Base height + random activity if playing
+                    let barHeight = isPlaying
+                        ? (Math.random() * canvas.height * 0.5) + 10
+                        : 5; // Flatline when paused
+
+                    // Make it look organic
+                    if (isPlaying) {
+                        barHeight *= Math.sin(Date.now() * 0.005 + i * 0.2) * 0.5 + 1;
+                    }
+
+                    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                    gradient.addColorStop(0, '#38bdf8');
+                    gradient.addColorStop(1, 'transparent');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(i * barWidth, canvas.height - barHeight, barWidth - 2, barHeight);
+                }
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // --- CONTROLLERS ---
+        const enterBtn = document.getElementById('enter-btn');
+        const overlay = document.getElementById('entrance-overlay');
+        const controlsUI = document.getElementById('controls-ui');
+        const messageLock = document.getElementById('message-lock');
+        const musicToggleBtn = document.getElementById('music-toggle');
+
+        // 1. Entrance: Play BG Music Only
+        enterBtn.addEventListener('click', () => {
+            // DO NOT UNLOCK SCROLL HERE - Wait for "Start Our Journey"
+            window.scrollTo(0, 0);
+
+            bgMusic.volume = 0.5; // Set reasonable volume
+            bgMusic.play().catch(e => console.log("Audio play failed", e));
+
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            controlsUI.classList.remove('opacity-0');
+            initLyrics(); // Prepare lyrics (hidden)
+
+            // Confetti
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#38bdf8', '#fbbf24'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#38bdf8', '#fbbf24'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        });
+
+        // 2. Play Voice Message (The Reveal)
+        // 2. Play Voice Message (The Reveal)
+        let signatureRevealed = false; // Flag to ensure single trigger
+
+        function playVoiceMessage() {
+            // Init simulation if not already running
+            initAudioContext();
+
+            // Fade out BG Music
+            gsap.to(bgMusic, { volume: 0, duration: 2, onComplete: () => bgMusic.pause() });
+
+            // Hide the Lock Overlay
+            messageLock.style.opacity = '0';
+            setTimeout(() => { messageLock.style.display = 'none'; }, 800);
+
+            // Play Voice Note
+            voiceNote.volume = 1.0;
+            voiceNote.play().catch(e => console.error("Voice play failed:", e));
+
+            // Allow re-trigger if re-played (optional, but good for testing)
+            signatureRevealed = false;
+            isVoicePlaying = true;
+            updateLyrics();
+        }
+        // Make function globally available for button onclick
+        window.playVoiceMessage = playVoiceMessage;
+
+        // Loop for Revealing Lyrics
+        function updateLyrics() {
+            if (!isVoicePlaying) return;
+            const currentTime = voiceNote.currentTime;
+
+            // Check for completion (Last word time + 1.5s buffer for reading)
+            if (!signatureRevealed && VOICE_DATA.length > 0) {
+                const lastWordTime = VOICE_DATA[VOICE_DATA.length - 1].time;
+                if (currentTime > lastWordTime + 0.5) {
+                    signatureRevealed = true;
+
+                    const sig = document.getElementById('signature-block');
+                    sig.classList.remove('opacity-0');
+
+                    // Sparkles text effect around signature
+                    const rect = sig.getBoundingClientRect();
+                    const x = (rect.left + rect.width / 2) / window.innerWidth;
+                    const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: y, x: x },
+                        colors: ['#FFD700', '#38bdf8'],
+                        zIndex: 9999
+                    });
+                }
+            }
+
+            VOICE_DATA.forEach((item, index) => {
+                const span = document.getElementById(`word-${index}`);
+                if (currentTime >= item.time) {
+                    span.className = 'lyric-word lyric-active'; // Glow active word
+
+                    // Mark previous words as passed (readable but not glowing)
+                    for (let i = 0; i < index; i++) {
+                        const prevSpan = document.getElementById(`word-${i}`);
+                        if (prevSpan.classList.contains('lyric-active')) {
+                            prevSpan.className = 'lyric-word lyric-passed';
+                        }
+                    }
+                }
+            });
+            requestAnimationFrame(updateLyrics);
+        }
+
+        // 3. Toggle BG Music (Top Right Button)
+        musicToggleBtn.addEventListener('click', () => {
+            if (isVoicePlaying) {
+                // If voice is playing, toggle voice
+                if (voiceNote.paused) voiceNote.play();
+                else voiceNote.pause();
+            } else {
+                // Toggle BG music
+                if (bgMusic.paused) bgMusic.play();
+                else bgMusic.pause();
+            }
+
+            // Icon update
+            const icon = document.getElementById('music-icon');
+            icon.innerText = (bgMusic.paused && voiceNote.paused) ? 'music_off' : 'music_note';
+        });
+
+
+        // --- SEND LOVE & TRACKING ---
+        async function sendLove() {
+            const defaults = { origin: { y: 0.9, x: 0.9 }, spread: 30, startVelocity: 40, scalar: 2 };
+            confetti({ ...defaults, particleCount: 20, shapes: ['star'], colors: ['#fbbf24', '#38bdf8'] });
+            if (db) {
+                const docRef = db.collection('love_clicks').doc('summary');
+                try {
+                    await db.runTransaction(async (transaction) => {
+                        const doc = await transaction.get(docRef);
+                        if (!doc.exists) transaction.set(docRef, { count: 1 });
+                        else transaction.update(docRef, { count: (doc.data().count || 0) + 1 });
+                    });
+                } catch (e) { }
+            }
+        }
+
+        document.getElementById('admin-trigger').addEventListener('dblclick', async () => {
+            document.getElementById('admin-modal').style.display = 'flex';
+            if (db) {
+                const doc = await db.collection('love_clicks').doc('summary').get();
+                document.getElementById('admin-count').innerText = doc.exists ? doc.data().count : "0";
+            }
+        });
+
+        // --- THREE.JS BACKGROUND ---
+        function initThreeJS() {
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x0f0518, 0.002);
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); // Antialias can be expensive
+
+            // OPTIMIZATION: Check for mobile
+            const isMobile = window.innerWidth < 768;
+            if (isMobile) {
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Cap pixel ratio
+            }
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            const container = document.createElement('div');
+            container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;';
+            document.body.prepend(container);
+            container.appendChild(renderer.domElement);
+
+            const hearts = [];
+
+            // OPTIMIZATION: Reduce count on mobile
+            const heartCount = isMobile ? 15 : 40;
+
+            for (let i = 0; i < heartCount; i++) {
+                const material = new THREE.MeshBasicMaterial({ color: Math.random() > 0.5 ? 0xfbbf24 : 0x38bdf8, transparent: true, opacity: Math.random() * 0.4 + 0.1, side: THREE.DoubleSide });
+                // const mesh = new THREE.Mesh(geometry, material); // Use Heart Geometry
+                const mesh = new THREE.Mesh(new THREE.OctahedronGeometry(1.5), material); // Use Geometric Shape
+                mesh.position.set((Math.random() - 0.5) * 40, (Math.random() - 0.5) * 40, (Math.random() - 0.5) * 40);
+                const s = Math.random() * 0.05 + 0.02;
+                mesh.scale.set(s, -s, s);
+                mesh.userData = { velY: Math.random() * 0.02 + 0.01, velRot: (Math.random() - 0.5) * 0.02, originalScale: s };
+                scene.add(mesh);
+                hearts.push(mesh);
+            }
+
+            const pGeom = new THREE.BufferGeometry();
+
+            // OPTIMIZATION: Reduce star count
+            const pCount = isMobile ? 500 : 1500;
+
+            const pPos = new Float32Array(pCount * 3);
+            for (let i = 0; i < pCount * 3; i++) pPos[i] = (Math.random() - 0.5) * 50;
+            pGeom.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+            const pMat = new THREE.PointsMaterial({ size: 0.03, color: 0xffffff, transparent: true, opacity: 0.4 });
+            const stars = new THREE.Points(pGeom, pMat);
+            scene.add(stars);
+
+            camera.position.z = 15;
+            let mouseX = 0, mouseY = 0;
+            // Only add mouse info if usually effective, but keeping for subtle gyro-like effects if we wanted (omitted here)
+            document.addEventListener('mousemove', (e) => { mouseX = (e.clientX - window.innerWidth / 2) * 0.001; mouseY = (e.clientY - window.innerHeight / 2) * 0.001; });
+
+            const clock = new THREE.Clock();
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = Date.now() * 0.001;
+                scene.rotation.y += 0.001;
+                scene.rotation.x += (mouseY - scene.rotation.x) * 0.05;
+                scene.rotation.y += (mouseX - scene.rotation.y) * 0.05;
+                hearts.forEach(h => {
+                    h.position.y += h.userData.velY;
+                    h.rotation.z += h.userData.velRot;
+                    h.rotation.y += h.userData.velRot;
+                    if (h.position.y > 20) h.position.y = -20;
+
+                    // Heartbeat Pulse
+                    const scale = h.userData.originalScale * (1 + 0.2 * Math.sin(time * 5 + h.position.x));
+                    h.scale.set(scale, -scale, scale);
+                });
+                renderer.render(scene, camera);
+            }
+            animate();
+            window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+        }
+        initThreeJS();
+
+        // --- MOUSE CURSOR ---
+        const cursorCanvas = document.getElementById('cursor-canvas');
+        if (cursorCanvas) {
+            const ctx = cursorCanvas.getContext('2d');
+            let width, height, particles = [];
+
+            // OPTIMIZATION: Disable on touch devices
+            const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+            if (!isTouch) {
+                function initCursor() { width = window.innerWidth; height = window.innerHeight; cursorCanvas.width = width; cursorCanvas.height = height; }
+                window.addEventListener('resize', initCursor);
+                initCursor();
+
+                document.addEventListener('mousemove', (e) => {
+                    particles.push({ x: e.clientX, y: e.clientY, size: Math.random() * 8 + 5, color: `hsl(${Math.random() * 60 + 280}, 100%, 70%)`, life: 1 });
+                });
+
+                function animateCursor() {
+                    ctx.clearRect(0, 0, width, height);
+                    for (let i = 0; i < particles.length; i++) {
+                        let p = particles[i];
+                        ctx.fillStyle = p.color; ctx.globalAlpha = p.life;
+                        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+                        p.life -= 0.05; p.y += 1;
+                        if (p.life <= 0) { particles.splice(i, 1); i--; }
+                    }
+                    requestAnimationFrame(animateCursor);
+                }
+                animateCursor();
+            } else {
+                cursorCanvas.style.display = 'none'; // Hide canvas on mobile
+            }
+        }
+
+        // --- MISC UTILS ---
+        function scrollToGallery() { document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' }); }
+        function openLightbox(el) {
+            document.getElementById('lightbox-img').src = el.querySelector('img').src;
+            document.getElementById('lightbox-caption').innerText = el.querySelector('p').innerText;
+            const lb = document.getElementById('lightbox'); lb.classList.remove('hidden');
+            setTimeout(() => { lb.classList.remove('opacity-0'); document.getElementById('lightbox-img').classList.remove('scale-95'); document.getElementById('lightbox-img').classList.add('scale-100'); }, 10);
+        }
+        function closeLightbox() {
+            const lb = document.getElementById('lightbox'); lb.classList.add('opacity-0');
+            document.getElementById('lightbox-img').classList.add('scale-95');
+            setTimeout(() => lb.classList.add('hidden'), 500);
+        }
+
+        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('reveal-visible'); }); }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+
+        // --- 4. COUNTDOWN & REVEAL LOGIC ---
+        // TARGET DATE: Jan 1, 2026
+        // const TARGET_DATE = new Date(Date.now() + 20000).getTime();
+        const TARGET_DATE = new Date("January 1, 2026 00:00:00").getTime();
+
+        const finalCountdownOverlay = document.getElementById('final-countdown');
+        const bigCount = document.getElementById('big-count');
+        const grandRevealOverlay = document.getElementById('grand-reveal');
+        const waitingHeader = document.querySelector('h1 span.text-gradient'); // Ref to "2026..."
+        let revealTriggered = false;
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const dist = TARGET_DATE - now;
+
+            if (dist < 0) {
+                // TIMER EXPIRED -> SHOW REVEAL
+                if (!revealTriggered) showGrandReveal();
+                document.getElementById('days').innerText = "00";
+                document.getElementById('hours').innerText = "00";
+                document.getElementById('minutes').innerText = "00";
+                document.getElementById('seconds').innerText = "00";
+                return;
+            }
+
+            // FINAL 10 SECONDS
+            if (dist <= 10000) {
+                if (finalCountdownOverlay.classList.contains('hidden-overlay')) {
+                    finalCountdownOverlay.classList.remove('hidden-overlay');
+                }
+                const secondsLeft = Math.ceil(dist / 1000);
+                bigCount.innerText = secondsLeft;
+                bigCount.style.transform = `scale(${1 + (10 - secondsLeft) * 0.1})`; // Grow slightly
+                return;
+            }
+
+            // STANDARD CLOCK
+            document.getElementById('days').innerText = String(Math.floor(dist / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            document.getElementById('hours').innerText = String(Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(Math.floor((dist % (1000 * 60)) / 1000)).padStart(2, '0');
+        }
+
+        function showGrandReveal() {
+            revealTriggered = true;
+            finalCountdownOverlay.classList.add('hidden-overlay'); // Hide countdown
+            grandRevealOverlay.classList.remove('hidden-overlay'); // Show Reveal
+
+            // Update the "Waiting" text to celebration text
+            if (waitingHeader) { // Define waitingHeader globally or locally
+                // It is defined globally in previous step, but let's be safe
+                const h1 = waitingHeader.parentElement;
+                if (h1) {
+                    waitingHeader.innerText = "2026 is Here!";
+                    h1.innerHTML = h1.innerHTML.replace("Waiting for", "Welcome to");
+                }
+            }
+
+            // Play Celebration Audio if available (optional)
+            // bgMusic.play(); 
+
+            // HIDE TIMER
+            const timerContainer = document.getElementById('timer-container');
+            if (timerContainer) timerContainer.classList.add('hidden');
+
+
+            // FIREWORKS START NOW (Immediate)
+            startFireworks();
+
+            // Massive confetti burst
+            const duration = 15 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 8, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#38bdf8', '#fbbf24', '#ffffff'] });
+                confetti({ particleCount: 8, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#38bdf8', '#fbbf24', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        function unlockScroll() {
+            // Unlock page
+            document.body.classList.remove('overflow-hidden');
+            document.body.classList.add('overflow-x-hidden');
+
+            // Ensure controls are visible & music plays
+            document.getElementById('controls-ui').classList.remove('opacity-0');
+            if (document.getElementById('bg-instrumental').paused) {
+                document.getElementById('bg-instrumental').play().catch(e => console.log("Auto-play blocked"));
+            }
+
+            // FIREWORKS ALREADY STARTED
+            // startFireworks();
+
+            // Fade out overlay
+            grandRevealOverlay.style.opacity = '0';
+            setTimeout(() => {
+                grandRevealOverlay.classList.add('hidden-overlay');
+            }, 1000);
+
+            // Scroll to letter
+            document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+        }
+        window.unlockScroll = unlockScroll;
+
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // --- PERSONALIZATION & SHARE ---
+        function initPersonalization() {
+            const params = new URLSearchParams(window.location.search);
+            const fromName = params.get('from') || params.get('name');
+
+            if (fromName) {
+                // Sanitize input
+                const safeName = fromName.replace(/</g, "&lt;").replace(/>/g, "&gt;").slice(0, 20);
+
+                // Update UI
+                const sigName = document.getElementById('signature-name');
+                const senderLabel = document.getElementById('sender-label');
+
+                if (sigName) sigName.innerText = safeName;
+                if (senderLabel) senderLabel.innerText = `From ${safeName}`;
+
+                // Update Page Title
+                document.title = `${safeName} wishes you a Happy New Year!`;
+            }
+        }
+
+        async function shareApp() {
+            const shareData = {
+                title: 'Happy New Year 2026!',
+                text: 'I have a special 2026 wish for you. Open this gift!',
+                url: window.location.href
+            };
+
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    // Fallback: Copy to clipboard
+                    await navigator.clipboard.writeText(window.location.href);
+                    alert("Link copied to clipboard!");
+                }
+            } catch (err) {
+                console.log('Share failed:', err);
+            }
+        }
+
+        // Initialize on load
+        initPersonalization();
+
+        function startFireworks() {
+            const canvas = document.getElementById('fireworks-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particles = [];
+
+            function Particle(x, y, color) {
+                this.x = x; this.y = y; this.color = color;
+                this.velocity = { x: (Math.random() - 0.5) * 8, y: (Math.random() - 0.5) * 8 };
+                this.alpha = 1; this.friction = 0.96;
+            }
+
+            Particle.prototype.draw = function () {
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 3, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+
+            Particle.prototype.update = function () {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.01;
+                this.draw();
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                ctx.fillStyle = 'rgba(15, 5, 24, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach((particle, i) => {
+                    if (particle.alpha > 0) particle.update();
+                    else particles.splice(i, 1);
+                });
+
+                if (Math.random() < 0.15) { // Increased frequency from 0.05 to 0.15
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height * 0.5;
+                    const color = `hsl(${Math.random() * 360}, 50%, 50%)`;
+                    for (let i = 0; i < 40; i++) particles.push(new Particle(x, y, color)); // More particles per explosion
+                }
+            }
+            animate();
+        }
+
+
+
+    </script>
+</body>
+
+</html>
